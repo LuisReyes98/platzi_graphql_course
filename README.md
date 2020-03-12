@@ -132,3 +132,15 @@ query GetCourse2($course: ID!){
   }
 }
 ```
+
+## Enums
+
+permite declarar en el esquema campos que tienen valores especificos cuya validacion es automatica.
+
+```graphql
+enum Level {
+  principiante
+  intermedio
+  avanzado
+}
+```
