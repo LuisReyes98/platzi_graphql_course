@@ -144,3 +144,49 @@ enum Level {
   avanzado
 }
 ```
+
+## Intefaces
+
+permiten agrupar tipos de datos y relacionarlos como un grupo en comun
+
+```graphql
+interface Person {
+  _id: ID!
+  name: String!
+  email: String!
+}
+
+
+type Student implements Person {
+  _id: ID!
+  name: String!
+  email: String!
+  avatar: String
+}
+
+
+type Monitor implements Person  {
+  _id: ID!
+  name: String!
+  email: String!
+  phone: String
+}
+```
+
+y realizar perticiones de datos condicional si el dato es de algun tipo
+
+```graphql
+{
+  getPeople{
+    _id
+    name
+    email
+    ... on Monitor {
+      phone
+    }
+    ... on Student {
+      avatar
+    }
+  }
+}
+```

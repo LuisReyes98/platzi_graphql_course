@@ -16,12 +16,29 @@ type Course {
   level: Level
 }
 
-type Student {
+interface Person {
   _id: ID!
   name: String!
   email: String!
 }
 
+
+type Student implements Person {
+  _id: ID!
+  name: String!
+  email: String!
+  avatar: String
+}
+
+
+type Monitor implements Person  {
+  _id: ID!
+  name: String!
+  email: String!
+  phone: String
+}
+
+"Querys"
 type Query {
   "Devuelve todos los cursos"
   getCourses: [Course]
@@ -30,11 +47,11 @@ type Query {
   # el ! implica que es un campo obligatorio
   getCourse(id: ID!): Course
 
-  "Devuelve todos los estudiates"
-  getStudents: [Student]
+  "Devuelve todas las personas"
+  getPeople: [Person]
 
-  "Devuelve un estudiate"
-  getStudent(id: ID!): Student
+  "Devuelve una persona"
+  getPerson(id: ID!): Person
 }
 
 input CourseInput {
@@ -52,14 +69,18 @@ input CourseEditInput {
   topic: String
 }
 
-input StudentInput {
+input PersonInput {
   name: String!
   email: String!
+  phone: String
+  avatar: String
 }
 
-input StudentEditInput {
+input PersonEditInput {
   name: String
   email: String
+  phone: String
+  avatar: String
 }
 
 type Mutation {
@@ -69,13 +90,17 @@ type Mutation {
   "Edita un curso"
   editCourse(_id: ID!, input: CourseEditInput): Course
 
-  "Crea un estudiante"
-  createStudent(input: StudentInput!): Student
+  "Crea una persona"
+  createPerson(input: PersonInput!): Person
 
-  "Edita un estudiante"
-  editStudent(_id: ID!, input: StudentEditInput): Student
+  "Edita una persona"
+  editPerson(_id: ID!, input: PersonEditInput): Person
 
   "Agregar una persona a un curso"
   addPeople(courseID: ID!, personID: ID!): Course
 
+  "Elimina un curso"
+  deleteCourse(_id: ID!): Boolean
+  "Elimina un estudiante"
+  deleteStudent(_id: ID!): Boolean
 }
