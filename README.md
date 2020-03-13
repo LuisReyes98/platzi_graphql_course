@@ -147,7 +147,7 @@ enum Level {
 
 ## Intefaces
 
-permiten agrupar tipos de datos y relacionarlos como un grupo en comun
+permiten agrupar tipos de datos que tengan campos en comun y relacionarlos como un grupo en comun
 
 ```graphql
 interface Person {
@@ -186,6 +186,76 @@ y realizar perticiones de datos condicional si el dato es de algun tipo
     }
     ... on Student {
       avatar
+    }
+  }
+}
+```
+
+## Skip e Include
+
+permiten agregar o ignorar informacion en un query en base a un booleano
+
+```graphql
+query getPeopleData($monitor: Boolean!, $notAvatar: Boolean!){
+  getPeople{
+    _id
+    name
+    ... on Monitor @include(if: $monitor){
+      phone
+    }
+    ... on Student @skip(if: $notAvatar){
+      avatar
+      email
+    }
+  }
+}
+```
+
+## Deprecated
+
+en el esquema el uso de deprecated ayuda a evolucionar la api de forma progresiva, informando que cierta informacion no estara disponible en el futuro
+
+```graphql
+type Course {
+  _id: ID!
+  title: String!
+  teacher: String
+  description: String!
+  topic: String @deprecated
+  people: [Student]
+  level: Level
+}
+```
+
+## Unions
+
+permite relacionar objetos que no tengan relacion para realizar consultas globales a todos los que son parte del union.
+
+en el squema:
+
+```graphql
+union GlobalSearch = Course | Student | Monitor
+```
+
+se deben generar resolvers especificos para solventar el union y una query se haria de la siguiente forma:
+
+```graphql
+{
+  searchItems(keyword: "1"){
+    __typename
+    ... on Course{
+      title
+      description
+      teacher
+      level
+    }
+    ... on Monitor {
+      name
+      phone
+    }
+    ... on Student {
+      name
+      email
     }
   }
 }
